@@ -2,8 +2,18 @@ import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import { useManager } from '@/hooks/useManager'
 
+function getServerStatus() {
+	// const url = `http://localhost:8000/ping`
+	const url = `https://${process.env.SERVER_HOSTNAME}/ping`
+
+	fetch(url, {
+		method: 'GET',
+		mode: 'no-cors',
+	})
+}
+
 export default function Home() {
-	const { players } = useManager()
+	const { players, restartGame } = useManager()
 
 	return (
 		<>
@@ -15,7 +25,8 @@ export default function Home() {
 			</Head>
 			<main className={styles.main}>
 				<h1>Hello World!</h1>
-
+				<button onClick={() => restartGame()}>Restart</button>
+				<button onClick={() => getServerStatus()}>Fetch Server Status</button>
 				<section className={styles.players}>
 					{players.map(({ playerId, isConnected }) => (
 						<div key={playerId}>{`${

@@ -14,6 +14,7 @@ type ConnectedPlayersPayload = { players: PlayerIdPayload[] }
 
 interface ServerToClientEvents {
 	'manager/connected': (payload: ConnectedPlayersPayload) => void
+	'manager/restarted': () => void
 	'player/connected': (payload: PlayerIdPayload) => void
 	'player/joined': (payload: PlayerIdPayload) => void
 	'player/disjoined': (payload: PlayerIdPayload) => void
@@ -22,6 +23,7 @@ interface ServerToClientEvents {
 
 interface ClientToServerEvents {
 	'manager/connect': () => void
+	'manager/restart': () => void
 	'player/connect': (payload: PlayerIdPayload) => void
 	'player/join': (payload: PlayerIdPayload) => void
 	'player/disjoin': (payload: PlayerIdPayload) => void
@@ -29,7 +31,8 @@ interface ClientToServerEvents {
 
 const io = new Server<ClientToServerEvents, ServerToClientEvents>({
 	cors: {
-		origin: ['http://localhost:3000', 'https://trivia-ckrac.vercel.app/'],
+		allowedHeaders: ['Access-Control-Allow-Origin'],
+		origin: ['http://localhost:3000', 'https://trivia-ckrac.vercel.app'],
 		credentials: true,
 	},
 })
@@ -47,7 +50,13 @@ let managerSocketId: string
 io.on('connection', (socket) => {
 	socket.on('manager/connect', () => {
 		managerSocketId = socket.id
+		console.log('manager/connect', managerSocketId)
 		socket.emit('manager/connected', { players })
+	})
+
+	socket.on('manager/restart', () => {
+		players = []
+		io.emit('manager/restarted')
 	})
 
 	socket.on('disconnect', () => {

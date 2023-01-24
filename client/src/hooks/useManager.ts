@@ -16,6 +16,10 @@ export const useManager = () => {
 				setPlayers(players)
 			})
 
+			socket.on('manager/restarted', () => {
+				setPlayers([])
+			})
+
 			socket.on('player/joined', (payload) => {
 				setPlayers((players) => [
 					...players,
@@ -59,7 +63,12 @@ export const useManager = () => {
 		}
 	}, [])
 
+	function restartGame() {
+		Socket.socket?.emit('manager/restart')
+	}
+
 	return {
 		players,
+		restartGame,
 	}
 }

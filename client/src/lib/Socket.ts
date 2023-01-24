@@ -4,11 +4,14 @@ const hostname = process.env.SERVER_HOSTNAME
 const wsPort = process.env.SERVER_PORT
 const endpoint = `ws://${hostname}:${wsPort}`
 
+console.log('endpoint', endpoint)
+
 type PlayerIdPayload = { playerId: string }
 type ConnectedPlayersPayload = { players: PlayerIdPayload[] }
 
 interface ServerToClientEvents {
 	'manager/connected': (payload: ConnectedPlayersPayload) => void
+	'manager/restarted': () => void
 	'player/connected': (payload: PlayerIdPayload) => void
 	'player/joined': (payload: PlayerIdPayload) => void
 	'player/disjoined': (payload: PlayerIdPayload) => void
@@ -17,6 +20,7 @@ interface ServerToClientEvents {
 
 interface ClientToServerEvents {
 	'manager/connect': () => void
+	'manager/restart': () => void
 	'player/connect': (payload: PlayerIdPayload) => void
 	'player/join': (payload: PlayerIdPayload) => void
 	'player/disjoin': (payload: PlayerIdPayload) => void
