@@ -1,7 +1,7 @@
 import io, { Socket as SocketIO } from 'socket.io-client'
 
-const hostname = 'localhost'
-const wsPort = '8000'
+const hostname = process.env.SERVER_HOSTNAME
+const wsPort = process.env.SERVER_PORT
 const endpoint = `ws://${hostname}:${wsPort}`
 
 type PlayerIdPayload = { playerId: string }

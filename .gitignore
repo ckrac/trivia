@@ -26,7 +26,9 @@ client/yarn-error.log*
 client/.pnpm-debug.log*
 
 # local env files
-client/.env*.local
+.env*.local
+.env
+
 
 # vercel
 client/.vercel
