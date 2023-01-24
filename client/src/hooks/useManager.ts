@@ -11,22 +11,9 @@ export const useManager = () => {
 
 	useEffect(() => {
 		Socket.connect((socket) => {
-			console.log('x')
-			console.log('x')
-			console.log('connected >>>>>>>>>', socket.id)
-			console.log('Socket.socket?.id', Socket.socket?.id)
-			console.log('x')
-			console.log('x')
-			console.log('x')
-
 			socket.emit('manager/connect')
 			socket.on('manager/connected', ({ players }) => {
-				console.log('x')
-				console.log('x')
-				console.log('manager/connected >>>>>>>>>>', players)
 				setPlayers(players)
-				console.log('x')
-				console.log('x')
 			})
 
 			socket.on('player/joined', (payload) => {
@@ -36,6 +23,12 @@ export const useManager = () => {
 						? []
 						: [{ ...payload, isConnected: true }]),
 				])
+			})
+
+			socket.on('player/disjoined', (payload) => {
+				setPlayers((players) =>
+					players.filter((player) => player.playerId !== payload.playerId)
+				)
 			})
 
 			socket.on('player/connected', ({ playerId }) => {
@@ -60,6 +53,10 @@ export const useManager = () => {
 				)
 			})
 		})
+
+		return () => {
+			Socket.socket?.disconnect()
+		}
 	}, [])
 
 	return {
