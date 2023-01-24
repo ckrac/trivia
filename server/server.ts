@@ -32,7 +32,7 @@ interface ClientToServerEvents {
 const io = new Server<ClientToServerEvents, ServerToClientEvents>({
 	cors: {
 		allowedHeaders: ['Access-Control-Allow-Origin'],
-		origin: ['http://localhost:3000', 'https://trivia-ckrac.vercel.app'],
+		origin: ['http://localhost:3000', 'https://trivia-flame.vercel.app'],
 		credentials: true,
 	},
 })
