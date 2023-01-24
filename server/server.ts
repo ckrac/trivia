@@ -1,5 +1,13 @@
 import { serve } from 'https://deno.land/std@0.166.0/http/server.ts'
 import { Server } from 'https://deno.land/x/socket_io@0.2.0/mod.ts'
+import { Application } from 'https://deno.land/x/oak@v11.1.0/mod.ts'
+
+const app = new Application()
+app.use((ctx) => {
+	const { pathname } = ctx.request.url
+
+	if (pathname === '/ping') ctx.response.body = 'pong'
+})
 
 type PlayerIdPayload = { playerId: string }
 type ConnectedPlayersPayload = { players: PlayerIdPayload[] }
@@ -91,6 +99,10 @@ io.on('connection', (socket) => {
 	})
 })
 
-await serve(io.handler(), {
+const handler = io.handler(async (req) => {
+	return (await app.handle(req)) || new Response(null, { status: 404 })
+})
+
+await serve(handler, {
 	port: 8000,
 })
