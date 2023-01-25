@@ -29,10 +29,12 @@ interface ClientToServerEvents {
 	'player/disjoin': (payload: PlayerIdPayload) => void
 }
 
+const CLIENT_DOMAIN = Deno.env.get('CLIENT_DOMAIN')
+
 const io = new Server<ClientToServerEvents, ServerToClientEvents>({
 	cors: {
 		allowedHeaders: ['Access-Control-Allow-Origin'],
-		origin: ['http://localhost:3000', 'https://trivia-flame.vercel.app'],
+		...(CLIENT_DOMAIN && { origin: [CLIENT_DOMAIN] }),
 		credentials: true,
 	},
 })
@@ -50,7 +52,6 @@ let managerSocketId: string
 io.on('connection', (socket) => {
 	socket.on('manager/connect', () => {
 		managerSocketId = socket.id
-		console.log('manager/connect', managerSocketId)
 		socket.emit('manager/connected', { players })
 	})
 

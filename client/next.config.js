@@ -2,8 +2,9 @@
 const nextConfig = {
 	reactStrictMode: true,
 	env: {
-		SERVER_HOSTNAME: process.env.SERVER_HOSTNAME,
-		SERVER_PORT: process.env.SERVER_PORT,
+		SERVER_DOMAIN: process.env.SERVER_DOMAIN,
+		SERVER_HTTP_PROTOCOL: process.env.SERVER_HTTP_PROTOCOL,
+		SERVER_SOCKET_URI: process.env.SERVER_SOCKET_URI,
 	},
 }
 

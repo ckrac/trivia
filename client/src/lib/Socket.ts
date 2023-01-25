@@ -1,10 +1,6 @@
 import io, { Socket as SocketIO } from 'socket.io-client'
 
-const hostname = process.env.SERVER_HOSTNAME
-const wsPort = process.env.SERVER_PORT
-const endpoint = `ws://${hostname}:${wsPort}`
-
-console.log('endpoint', endpoint)
+const endpoint = `${process.env.SERVER_SOCKET_URI}://${process.env.SERVER_DOMAIN}`
 
 type PlayerIdPayload = { playerId: string }
 type ConnectedPlayersPayload = { players: PlayerIdPayload[] }

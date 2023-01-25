@@ -3,8 +3,7 @@ import styles from '@/styles/Home.module.css'
 import { useManager } from '@/hooks/useManager'
 
 function getServerStatus() {
-	// const url = `http://localhost:8000/ping`
-	const url = `https://${process.env.SERVER_HOSTNAME}/ping`
+	const url = `${process.env.SERVER_HTTP_PROTOCOL}://${process.env.SERVER_DOMAIN}/ping`
 
 	fetch(url, {
 		method: 'GET',
